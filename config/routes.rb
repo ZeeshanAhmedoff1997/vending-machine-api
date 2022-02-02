@@ -17,6 +17,10 @@ Rails.application.routes.draw do
           end
         end
       end
+
+      resource :user, only: [] do
+        resource :deposit, controller: :deposit, only: [:show, :update, :destroy]
+      end
     end
   end
 end
