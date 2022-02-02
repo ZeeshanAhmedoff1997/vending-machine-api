@@ -46,6 +46,10 @@ module Api::V1
       render json: products, status: :ok
     end
 
+    def buy
+      product = Product.find(params[:id])
+    end
+
     private
       def product_params
         params.require(:product).permit(:name, :quantity, :cost)

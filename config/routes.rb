@@ -4,7 +4,11 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :products
+      resources :products do 
+        member do
+          post :buy
+        end
+      end
 
       resource :user, only: [] do
         resources :products, only: [] do 
