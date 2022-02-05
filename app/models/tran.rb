@@ -10,7 +10,7 @@ class Tran < ApplicationRecord
   validate :product_availability
 
   before_validation :calculate_spent
-  after_create :update_user_deposit
+  before_create :update_user_deposit
 
   private
     def buyer_deposit
@@ -30,6 +30,6 @@ class Tran < ApplicationRecord
     end
 
     def update_user_deposit
-      user.deposit.update(amount: 0)
+      user.deposit.update(amount: user.deposit.amount - spent)
     end
 end

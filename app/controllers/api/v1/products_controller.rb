@@ -53,7 +53,11 @@ module Api::V1
       trans = current_user.trans.new(product: Product.find(params[:id]), quantity: buy_params[:quantity])
 
       if trans.update(product_params)
-        render json: trans, status: :ok
+        render json: {
+          product: trans.product,
+          spent: trans.spent,
+          change: trans.user.deposit.change
+        }, status: :ok
       else
         render json: trans.errors, status: :unprocessable_entity
       end

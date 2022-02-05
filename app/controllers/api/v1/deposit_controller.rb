@@ -19,13 +19,7 @@ module Api::V1
     end
 
     def destroy
-      deposit = current_user.deposit
-
-      if deposit.update(amount: 0)
-        render json: deposit, status: :ok
-      else
-        render json: deposit.errors, status: :unprocessable_entity
-      end
+      render json: { change: current_user.deposit.change }, status: :ok
     end
 
     private
