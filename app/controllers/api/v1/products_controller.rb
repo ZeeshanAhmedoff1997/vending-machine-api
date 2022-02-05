@@ -1,6 +1,8 @@
 module Api::V1
   class ProductsController < BaseController
     skip_before_action :authenticate_user!, only: [:index]
+    before_action :authorization
+
     before_action :set_product, only: [:update, :destroy]
 
     def index
@@ -68,6 +70,10 @@ module Api::V1
 
       def set_product
         @product = current_user.products.find(params[:id])
+      end
+
+      def authorization
+        authorize Product  
       end
   end
 end

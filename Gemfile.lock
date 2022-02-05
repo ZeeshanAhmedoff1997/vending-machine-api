@@ -100,6 +100,8 @@ GEM
     orm_adapter (0.5.0)
     puma (4.3.10)
       nio4r (~> 2.0)
+    pundit (2.1.1)
+      activesupport (>= 3.0.0)
     racc (1.6.0)
     rack (2.2.3)
     rack-test (1.1.0)
@@ -169,6 +171,7 @@ DEPENDENCIES
   devise_token_auth
   listen (~> 3.2)
   puma (~> 4.1)
+  pundit
   rails (~> 6.0.3, >= 6.0.3.7)
   spring
   spring-watcher-listen (~> 2.0.0)

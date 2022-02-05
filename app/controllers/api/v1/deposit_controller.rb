@@ -1,5 +1,7 @@
 module Api::V1
   class DepositController < BaseController
+    before_action :authorization
+    
     def show
       deposit = current_user.deposit
 
@@ -30,6 +32,10 @@ module Api::V1
 
     def deposit_param
       params.permit(:deposit)
+    end
+
+    def authorization
+      authorize Deposit  
     end
   end
 end
