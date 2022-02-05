@@ -1,5 +1,6 @@
 module Api::V1
   class ProductsController < BaseController
+    skip_before_action :authenticate_user!, only: [:index]
     before_action :set_product, only: [:update, :destroy]
 
     def index
@@ -15,10 +16,10 @@ module Api::V1
     end
 
     def create
-      product = current_user.products.new(doc_params)
+      product = current_user.products.new(product_params)
     
       if product.save
-        render json: serialize(product), status: :created
+        render json: product, status: :created
       else
         render json: product.errors, status: :unprocessable_entity
       end
@@ -26,17 +27,17 @@ module Api::V1
 
     def update
       if @product.update(product_params)
-        render json: product, status: :ok
+        render json: @product, status: :ok
       else
-        render json: product.errors, status: :unprocessable_entity
+        render json: @product.errors, status: :unprocessable_entity
       end
     end
 
     def destroy
       if @product.destroy
-        render json: product, status: :ok
+        render json: @product, status: :ok
       else
-        render json: product.errors, status: :unprocessable_entity
+        render json: @product.errors, status: :unprocessable_entity
       end
     end
 
@@ -47,12 +48,22 @@ module Api::V1
     end
 
     def buy
-      product = Product.find(params[:id])
+      trans = current_user.trans.new(product: Product.find(params[:id]), quantity: buy_params[:quantity])
+
+      if trans.update(product_params)
+        render json: trans, status: :ok
+      else
+        render json: trans.errors, status: :unprocessable_entity
+      end
     end
 
     private
       def product_params
-        params.require(:product).permit(:name, :quantity, :cost)
+        params.permit(:name, :quantity, :cost)
+      end
+
+      def buy_params
+        params.permit(:quantity)
       end
 
       def set_product

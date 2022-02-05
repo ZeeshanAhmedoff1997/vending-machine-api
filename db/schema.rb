@@ -10,16 +10,35 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_02_182401) do
+ActiveRecord::Schema.define(version: 2022_02_05_040812) do
+
+  create_table "deposits", force: :cascade do |t|
+    t.integer "amount", default: 0
+    t.integer "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_deposits_on_user_id"
+  end
 
   create_table "products", force: :cascade do |t|
-    t.decimal "quantity", default: "0.0"
-    t.decimal "cost"
-    t.string "name"
+    t.integer "quantity", default: 0
+    t.integer "cost", default: 0
+    t.string "name", null: false
     t.integer "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_products_on_user_id"
+  end
+
+  create_table "trans", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "product_id", null: false
+    t.integer "quantity", null: false
+    t.integer "spent", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["product_id"], name: "index_trans_on_product_id"
+    t.index ["user_id"], name: "index_trans_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -42,12 +61,14 @@ ActiveRecord::Schema.define(version: 2022_02_02_182401) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "role", null: false
-    t.decimal "deposit", default: "0.0"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
+  add_foreign_key "deposits", "users"
   add_foreign_key "products", "users"
+  add_foreign_key "trans", "products"
+  add_foreign_key "trans", "users"
 end
