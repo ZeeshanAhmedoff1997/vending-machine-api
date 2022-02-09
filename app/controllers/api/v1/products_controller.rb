@@ -13,14 +13,14 @@ module Api::V1
 
     def show
       product = Product.find(params[:id])
-
+      product = serialize_product(product)
       render json: product, status: :ok
     end
 
     def create
       product = current_user.products.new(product_params)
-    
       if product.save
+        product = serialize_product(product)
         render json: product, status: :created
       else
         render json: product.errors, status: :unprocessable_entity
@@ -44,8 +44,7 @@ module Api::V1
     end
 
     def user_products
-      products = current_user.products
-
+      products = serialize_products(current_user.products)
       render json: products, status: :ok
     end
 
@@ -66,6 +65,28 @@ module Api::V1
     private
       def product_params
         params.permit(:name, :quantity, :cost, :image)
+      end
+
+      def serialize_products(products)
+        products.map { |product| { 
+          id: product.id,
+          cost: product.cost,
+          name: product.name,
+          user_id: product.user_id,
+          image: product.product_image,
+          quantity: product.quantity
+        }}
+      end
+
+      def serialize_product(product)
+        { 
+          id: product.id,
+          cost: product.cost,
+          name: product.name,
+          user_id: product.user_id,
+          image: product.product_image,
+          quantity: product.quantity
+        }
       end
 
       def buy_params

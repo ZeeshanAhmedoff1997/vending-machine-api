@@ -10,6 +10,12 @@ class Product < ApplicationRecord
 
   has_one_attached :image
 
+  def product_image
+    if image.present?
+      Rails.application.routes.url_helpers.rails_blob_path(image, only_path: true)
+    end
+  end
+
   private
 
   def user_must_be_seller
