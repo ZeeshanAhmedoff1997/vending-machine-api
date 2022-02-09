@@ -18,6 +18,7 @@ module Api::V1
     end
 
     def create
+      byebug
       product = current_user.products.new(product_params)
     
       if product.save
@@ -62,10 +63,10 @@ module Api::V1
         render json: trans.errors, status: :unprocessable_entity
       end
     end
-
+    
     private
       def product_params
-        params.permit(:name, :quantity, :cost)
+        params.permit(:name, :quantity, :cost, :image)
       end
 
       def buy_params

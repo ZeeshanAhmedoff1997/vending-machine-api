@@ -11,15 +11,22 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-	has_many :products
-  has_one :deposit
-  has_many :trans
+	has_many :products, dependent: :destroy
+  has_one :deposit, dependent: :destroy
+  has_many :trans, dependent: :destroy
   has_many :bought_products, through: :trans, source: :product
   
+  has_one_attached :profile_pic
   after_create :create_default_deposit
 
   validates :role, presence: true,
                    inclusion: { in: %w(buyer seller) }
+
+  
+
+  def user_profile_link
+    Rails.application.routes.url_helpers.rails_blob_path(profile_pic, only_path: true)
+  end
 
   private
     def create_default_deposit

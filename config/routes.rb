@@ -21,6 +21,10 @@ Rails.application.routes.draw do
       resource :user, only: [] do
         resource :deposit, controller: :deposit, only: [:show, :update, :destroy]
       end
+
+      resource :profile, controller: :profile, only: [:show, :update] do
+        get :image
+      end
     end
   end
 end

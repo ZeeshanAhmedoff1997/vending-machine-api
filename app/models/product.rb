@@ -8,6 +8,8 @@ class Product < ApplicationRecord
   validates :cost, numericality: { greater_than: -1 }
   validate :user_must_be_seller
 
+  has_one_attached :image
+
   private
 
   def user_must_be_seller
