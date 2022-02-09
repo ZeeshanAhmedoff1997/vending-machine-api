@@ -25,7 +25,9 @@ class User < ActiveRecord::Base
   
 
   def user_profile_link
-    Rails.application.routes.url_helpers.rails_blob_path(profile_pic, only_path: true)
+    if profile_pic.present?
+      Rails.application.routes.url_helpers.rails_blob_path(profile_pic, only_path: true)
+    end
   end
 
   private
